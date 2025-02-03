@@ -7,6 +7,7 @@ import { User } from 'src/common/entities/user.entity';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { ViewUserDto } from 'src/modules/user/dto/view-user.dto';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -29,12 +30,24 @@ export class AuthService {
     return ViewUserDto.fromEntity(user);
   }
 
-  async login(user: User) {
+  async login(user: User, response: Response) {
     const accessToken = await this.createAccessToken(user.id);
     const refreshToken = await this.createRefreshToken(user.id);
 
     // save refresh token to db
     await this.userService.updateRefreshToken(user, refreshToken);
+
+    response.cookie('Authentication', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    response.cookie('Refresh', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
 
     return {
       access_token: accessToken,
@@ -60,7 +73,7 @@ export class AuthService {
       newUserInfo,
       user.companyName,
     );
-    return this.login(newUser);
+    return this.login(newUser, null);
   }
 
   async refresh(user: any) {

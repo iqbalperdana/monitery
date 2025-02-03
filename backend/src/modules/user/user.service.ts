@@ -29,7 +29,7 @@ export class UserService {
     });
   }
 
-  async findOne(id: number): Promise<ViewUserDto | EntityNotFoundException> {
+  async findById(id: number): Promise<ViewUserDto | EntityNotFoundException> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new EntityNotFoundException(`User with id ${id} not found`);
@@ -42,7 +42,7 @@ export class UserService {
   }
 
   async update(id: number, user: Partial<User>): Promise<ViewUserDto> {
-    const existingUser = await this.findOne(id);
+    const existingUser = await this.findById(id);
     if (existingUser instanceof EntityNotFoundException) {
       throw existingUser;
     }
