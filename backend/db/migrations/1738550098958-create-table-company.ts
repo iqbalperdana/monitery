@@ -7,7 +7,7 @@ export class CreateTableCompany1738550098958 implements MigrationInterface {
               "id" BIGSERIAL PRIMARY KEY,
               "name" VARCHAR(255) UNIQUE NOT NULL,
               "description" VARCHAR(255),
-              "email" VARCHAR(255) UNIQUE NOT NULL,
+              "email" VARCHAR(255),
               "phone" VARCHAR(255),
               "address" VARCHAR(255),
               "logo_url" VARCHAR(255),

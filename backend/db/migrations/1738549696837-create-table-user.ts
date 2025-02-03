@@ -13,6 +13,8 @@ export class CreateTableUser1738549696837 implements MigrationInterface {
                     "verification_token" VARCHAR,
                     "is_active" BOOLEAN DEFAULT true,
                     "company_id" BIGINT NOT NULL DEFAULT 1,
+                    "refresh_token" VARCHAR,
+                    "refresh_token_expires" TIMESTAMP,
                     "created_at" TIMESTAMP NOT NULL DEFAULT now(),
                     "updated_at" TIMESTAMP NOT NULL DEFAULT now()
                 )    

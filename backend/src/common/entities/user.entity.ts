@@ -30,10 +30,16 @@ export class User {
   verificationToken: string;
 
   @Column({ nullable: true })
-  is_aactive: boolean;
+  is_active: boolean;
 
   @Column({ type: 'bigint', default: 1 })
   companyId: number;
+
+  @Column({ nullable: true })
+  refreshToken: string;
+
+  @Column({ nullable: true })
+  refreshTokenExpires: Date;
 
   @CreateDateColumn()
   createdAt: Date;

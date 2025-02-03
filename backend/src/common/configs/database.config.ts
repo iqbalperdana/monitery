@@ -14,8 +14,8 @@ const dbConfig = {
   synchronize: false,
   autoLoadEntities: true,
   logging: true,
-  entities: ['**/*.entity{.ts,.js}'],
-  migrations: ['./db/migrations/*{.ts,.js}'],
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  migrations: ['dist/db/migrations/*{.ts,.js}'],
   // cli: {
   //   migrationsDir: './db/migrations',
   //   entitiesDir: './src/**/*.entity{.ts,.js}',
