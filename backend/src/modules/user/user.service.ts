@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyService } from '../company/company.service';
 import { ViewUserDto } from './dto/view-user.dto';
 import { EntityNotFoundException } from '../../common/exceptions/entity-not-found.exception';
+import { UnauthorizedException } from 'src/common/exceptions/unauthorized.exception';
 
 @Injectable()
 export class UserService {
@@ -29,12 +30,15 @@ export class UserService {
     });
   }
 
-  async findById(id: number): Promise<ViewUserDto | EntityNotFoundException> {
+  async findById(
+    id: number,
+    useDto: boolean = false,
+  ): Promise<ViewUserDto | EntityNotFoundException | User> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new EntityNotFoundException(`User with id ${id} not found`);
     }
-    return ViewUserDto.fromEntity(user);
+    return useDto ? ViewUserDto.fromEntity(user) : user;
   }
 
   async create(user: Partial<User>): Promise<User> {
@@ -88,5 +92,21 @@ export class UserService {
     };
     user.companyId = (await this.companyService.create(company)).id;
     return await this.userRepository.save(user);
+  }
+
+  async validateUserAndRefreshToken(refreshToken: string, userId: string) {
+    try {
+      const user = await this.findById(parseInt(userId), false);
+
+      if (!user || !(user instanceof User)) {
+        throw new Error('User not found');
+      }
+      if (user.refreshToken !== refreshToken) {
+        throw new Error('Invalid refresh token');
+      }
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 }

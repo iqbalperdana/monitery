@@ -9,19 +9,24 @@ import {
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { User } from 'src/common/entities/user.entity';
 
-@Controller('api/clients')
 @UseGuards(JwtAuthGuard)
+@Controller('api/clients')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Post()
-  create(@Request() req, @Body() createClientDto: CreateClientDto) {
-    return this.clientService.create(req.user, createClientDto);
+  async create(
+    @CurrentUser() user: User,
+    @Body() createClientDto: CreateClientDto,
+  ) {
+    return this.clientService.create(user, createClientDto);
   }
 
   @Get()
-  findAll(@Request() req) {
+  async findAll(@Request() req) {
     return this.clientService.findAllByCurrentUser(req.user);
   }
 }

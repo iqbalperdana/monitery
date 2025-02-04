@@ -2,7 +2,7 @@ import { User } from 'src/common/entities/user.entity';
 import { ClientRepository } from './client.repository';
 import { CreateClientDto } from './dto/create-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Client } from 'src/common/entities/client.entity';
 
 @Injectable()
@@ -12,6 +12,14 @@ export class ClientService {
   ) {}
 
   async create(user: User, createClientDto: CreateClientDto) {
+    const isClientExist = await this.clientRepository.findOne({
+      where: { email: createClientDto.email, companyId: user.companyId },
+    });
+
+    if (isClientExist) {
+      throw new BadRequestException('Client already exist');
+    }
+
     const client = new Client();
     client.firstName = createClientDto.firstName;
     client.lastName = createClientDto.lastName;
