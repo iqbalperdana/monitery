@@ -34,4 +34,20 @@ export class ClientService {
       where: { companyId: user.companyId },
     });
   }
+
+  async update(userId: number, user: User, updateClientDto: CreateClientDto) {
+    const client = await this.clientRepository.findOne({
+      where: { id: userId, companyId: user.companyId },
+    });
+
+    if (!client) {
+      throw new BadRequestException('Client not found');
+    }
+
+    client.firstName = updateClientDto.firstName;
+    client.lastName = updateClientDto.lastName;
+    client.email = updateClientDto.email;
+    client.phone = updateClientDto.phone;
+    return await this.clientRepository.save(client);
+  }
 }

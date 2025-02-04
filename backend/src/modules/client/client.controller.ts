@@ -5,6 +5,8 @@ import {
   Body,
   Request,
   UseGuards,
+  Patch,
+  Param,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
@@ -28,5 +30,14 @@ export class ClientController {
   @Get()
   async findAll(@Request() req) {
     return this.clientService.findAllByCurrentUser(req.user);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: number,
+    @CurrentUser() user: User,
+    @Body() updateClientDto: CreateClientDto,
+  ) {
+    return this.clientService.update(id, user, updateClientDto);
   }
 }
