@@ -5,6 +5,9 @@ export class CreateTableInvoiceItem1738550861096 implements MigrationInterface {
     await queryRunner.query(`
                       CREATE TABLE "invoice_item" (
                           "id" BIGSERIAL PRIMARY KEY,
+                          "name" VARCHAR(255) NOT NULL,
+                          "description" VARCHAR(255),
+                          "image_url" VARCHAR(255),
                           "quantity" INT NOT NULL,
                           "price" DECIMAL(10, 2) NOT NULL,
                           "item_id" BIGINT NOT NULL,

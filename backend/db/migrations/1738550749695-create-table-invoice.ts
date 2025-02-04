@@ -11,6 +11,7 @@ export class CreateTableInvoice1738550749695 implements MigrationInterface {
                           "total" DECIMAL(10, 2) NOT NULL,
                           "status" VARCHAR(255) NOT NULL,
                           "notes" TEXT,
+                          "public_url" VARCHAR(255),
                           "client_id" BIGINT NOT NULL,                          
                           "company_id" BIGINT NOT NULL,
                           "created_at" TIMESTAMP NOT NULL DEFAULT now(),

@@ -1,16 +1,13 @@
 import { User } from 'src/common/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Client } from 'src/common/entities/client.entity';
 import { ItemRepository } from './item.repository';
 import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from 'src/common/entities/item.entity';
 
 @Injectable()
 export class ItemService {
-  constructor(
-    @InjectRepository(Client) private itemRepository: ItemRepository,
-  ) {}
+  constructor(@InjectRepository(Item) private itemRepository: ItemRepository) {}
 
   async create(user: User, createItemDto: CreateItemDto) {
     const item = new Item();

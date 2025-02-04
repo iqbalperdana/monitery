@@ -4,10 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
+  OneToMany,
+  BeforeInsert,
 } from 'typeorm';
-import { Item } from './item.entity';
+import { InvoiceItem } from './invoice-item.entity';
 
 @Entity('invoice')
 export class Invoice {
@@ -32,6 +32,9 @@ export class Invoice {
   @Column({ nullable: true })
   notes: string;
 
+  @Column({ nullable: true })
+  publicUrl: string;
+
   @Column({ type: 'bigint' })
   clientId: number;
 
@@ -44,17 +47,16 @@ export class Invoice {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => Item)
-  @JoinTable({
-    name: 'invoice_item',
-    joinColumn: {
-      name: 'invoice_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'item_id',
-      referencedColumnName: 'id',
-    },
+  @OneToMany(() => InvoiceItem, (invoiceItem) => invoiceItem.invoice, {
+    cascade: ['insert'],
   })
-  items: Item[];
+  invoiceItems: InvoiceItem[];
+
+  @BeforeInsert()
+  recalculateTotal() {
+    this.total = this.invoiceItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0,
+    );
+  }
 }

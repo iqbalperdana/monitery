@@ -22,8 +22,11 @@ export class AuthController {
   }
 
   @Post('/register')
-  async register(@Request() req) {
-    return this.authService.register(req.body);
+  async register(
+    @Request() req,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.register(req.body, response);
   }
 
   @Post('/logout')

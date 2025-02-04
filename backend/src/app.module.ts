@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { ClientModule } from './modules/client/client.module';
+import { ItemModule } from './modules/item/item.module';
+import { InvoiceModule } from './modules/invoice/invoice.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { ClientModule } from './modules/client/client.module';
     UserModule,
     CompanyModule,
     ClientModule,
+    ItemModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [

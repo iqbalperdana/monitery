@@ -84,7 +84,7 @@ export class AuthService {
     };
   }
 
-  async register(user: RegisterUserRequestDto) {
+  async register(user: RegisterUserRequestDto, response: Response) {
     const existingUser = await this.userService.findByEmail(user.email);
     if (existingUser) {
       throw new Error('User already exists');
@@ -102,7 +102,7 @@ export class AuthService {
       newUserInfo,
       user.companyName,
     );
-    return this.login(newUser, null);
+    return this.login(newUser, response);
   }
 
   async logout(user: any) {
