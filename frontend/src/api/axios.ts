@@ -11,26 +11,32 @@ const api = axios.create({
 });
 
 const refreshAccessToken = async (): Promise<string> => {
-  const refreshToken = Cookies.get("refreshToken");
+  const refreshToken = Cookies.get("Refresh");
+  console.log(refreshToken);
   if (!refreshToken) {
     throw new Error("No refresh token found");
   }
 
-  const response = await axios.post<{ accessToken: string }>(
-    `${API_BASE_URL}/auth/refresh`,
-    {
+  const response = await axios(`${API_BASE_URL}/auth/refresh`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `Refresh=${refreshToken}`,
+    },
+    data: {
       refreshToken,
-    }
-  );
+    },
+    withCredentials: true,
+  });
 
   const { accessToken } = response.data;
-  localStorage.setItem("accessToken", accessToken); // Update the access token in localStorage
+  localStorage.setItem("Authentication", accessToken); // Update the access token in localStorage
 
   return accessToken;
 };
 
 const getAccessToken = (): string | null => {
-  return localStorage.getItem("accessToken");
+  return localStorage.getItem("Authentication");
 };
 
 api.interceptors.request.use(
@@ -50,9 +56,10 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
+    console.error("API Error:", error);
     // Check if the error is due to an expired token (e.g., 401 Unauthorized)
     if (error.response?.status === 401 && !originalRequest._retry) {
+      console.log("Token expired, refreshing...");
       originalRequest._retry = true;
 
       try {
@@ -61,6 +68,9 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
+        // remove cookies and redirect to login
+        localStorage.removeItem("Authentication");
+        Cookies.remove("Refresh");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

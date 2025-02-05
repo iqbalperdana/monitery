@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-import { signIn } from "../services/authService";
+import { signIn, isAuthenticated } from "../services/authService";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -16,7 +16,7 @@ type SignInFormData = {
 };
 
 const SignIn: React.FC = () => {
-  const nvaigate = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -28,11 +28,25 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
       await signIn(data);
-      nvaigate("/dashboard");
+      navigate("/admin/dashboard");
     } catch (error) {
       console.error("Sign-in failed:", error);
     }
   };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        if (isAuthenticated()) {
+          navigate("/admin/dashboard");
+        }
+      } catch (error) {
+        console.error("Auth check failed:", error);
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

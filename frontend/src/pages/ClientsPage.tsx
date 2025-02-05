@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { fetchDashboardData } from "../services/dashboardService";
+import { fetchClientsData } from "../services/clientsService";
 
-const DashboardPage: React.FC = () => {
+const ClientsPage: React.FC = () => {
   const [data, setData] = useState<string>("");
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetchDashboardData();
+        const response = await fetchClientsData();
         setData(response.data);
       } catch (error) {
-        console.error("Failed to fetch dashboard data:", error);
+        console.error("Failed to fetch clients data:", error);
       }
     };
 
@@ -19,10 +19,10 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">Clients</h1>
       <p>{data}</p>
     </div>
   );
 };
 
-export default DashboardPage;
+export default ClientsPage;

@@ -24,8 +24,8 @@ export const signIn = async (data: SignInData): Promise<AuthResponse> => {
   const { accessToken, refreshToken } = response.data;
 
   // Store tokens
-  localStorage.setItem("accessToken", accessToken);
-  Cookies.set("refreshToken", refreshToken, { expires: 7 });
+  localStorage.setItem("Authentication", accessToken);
+  Cookies.set("Refresh", refreshToken, { expires: 7 });
 
   return response.data;
 };
@@ -36,18 +36,18 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
   const { accessToken, refreshToken } = response.data;
 
   // Store tokens
-  localStorage.setItem("accessToken", accessToken);
-  Cookies.set("refreshToken", refreshToken, { expires: 7 });
+  localStorage.setItem("Authentication", accessToken);
+  Cookies.set("Refresh", refreshToken, { expires: 7 });
 
   return response.data;
 };
 
 export const signOut = (): void => {
-  localStorage.removeItem("accessToken");
-  Cookies.remove("refreshToken");
+  localStorage.removeItem("Authentication");
+  Cookies.remove("Refresh");
 };
 
 export const isAuthenticated = (): boolean => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("Authentication");
   return !!accessToken;
 };
