@@ -7,8 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from './modules/company/company.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { ClientModule } from './modules/client/client.module';
 import { ItemModule } from './modules/item/item.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
@@ -32,12 +30,6 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
     InvoiceModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

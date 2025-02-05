@@ -34,7 +34,10 @@ export class UserService {
     id: number,
     useDto: boolean = false,
   ): Promise<ViewUserDto | EntityNotFoundException | User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['company'],
+    });
     if (!user) {
       throw new EntityNotFoundException(`User with id ${id} not found`);
     }

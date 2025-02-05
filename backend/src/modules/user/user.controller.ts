@@ -12,6 +12,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { ViewUserDto } from './dto/view-user.dto';
+import { User } from 'src/common/entities/user.entity';
 
 @Controller('api/users')
 @UseGuards(JwtAuthGuard)
@@ -26,6 +29,11 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Get('me')
+  getProfile(@CurrentUser() user: User) {
+    return ViewUserDto.fromEntity(user);
   }
 
   @Get(':id')

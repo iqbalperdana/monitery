@@ -18,12 +18,15 @@ export class ViewUserDto {
   @IsString()
   role?: string;
 
+  companyName?: string;
+
   static fromEntity(user: User): ViewUserDto {
     const viewUserDto = new ViewUserDto();
     viewUserDto.id = user.id.toString();
     viewUserDto.name = `${user.firstName} ${user.lastName}`.trim();
     viewUserDto.email = user.email;
     viewUserDto.isActive = user.isVerified;
+    viewUserDto.companyName = user.company?.name;
     // Note: The 'role' field is not present in the User entity, so it's not mapped here
     return viewUserDto;
   }
