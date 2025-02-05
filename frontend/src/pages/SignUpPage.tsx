@@ -1,42 +1,51 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { signUp } from "../services/authService";
+import { useNavigate } from "react-router-dom";
+
+const schema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Confirm Password is required"),
+  firstName: yup.string().required("First Name is required"),
+  lastName: yup.string().required("Last Name is required"),
+  companyName: yup.string().required("Company Name is required"),
+});
+
+type SignUpFormData = {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  confirmPassword: string;
+};
 
 const SignUp: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [companyName, setCompanyName] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    resolver: yupResolver(schema),
+  });
 
-  const registerUser = async () => {
+  const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
-      const response = await fetch("http://localhost:3001/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          firstName,
-          lastName,
-          companyName,
-        }),
-      });
-
-      if (!response.ok) {
-        console.error("Failed to register user");
-      }
+      await signUp(data);
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Sign-up failed:", error);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle sign-up logic here
-    console.log("Sign Up:", { email, password, confirmPassword });
-    registerUser();
   };
 
   return (
@@ -53,7 +62,7 @@ const SignUp: React.FC = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label
               htmlFor="email"
@@ -63,16 +72,17 @@ const SignUp: React.FC = () => {
             </label>
             <div className="mt-2">
               <input
-                type="email"
-                value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEmail(e.target.value)
-                }
                 id="email"
+                type="email"
+                {...register("email")}
                 placeholder="Enter your email"
-                required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -86,17 +96,18 @@ const SignUp: React.FC = () => {
               </label>
               <div className="mt-2">
                 <input
-                  type="text"
-                  value={firstName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFirstName(e.target.value)
-                  }
                   id="firstName"
+                  type="text"
+                  {...register("firstName")}
                   placeholder="First name"
-                  required
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
+              {errors.firstName && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.firstName.message}
+                </p>
+              )}
             </div>
             <div className="w-full px-3 sm:w-1/2">
               <label
@@ -107,16 +118,17 @@ const SignUp: React.FC = () => {
               </label>
               <div className="mt-2">
                 <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setLastName(e.target.value)
-                  }
                   id="lastName"
+                  type="text"
+                  {...register("lastName")}
                   placeholder="Last name"
-                  required
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
+                {errors.lastName && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.lastName.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -131,15 +143,16 @@ const SignUp: React.FC = () => {
             <div className="mt-2">
               <input
                 type="text"
-                value={companyName}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setCompanyName(e.target.value)
-                }
                 id="companyName"
+                {...register("companyName")}
                 placeholder="Company name"
-                required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
+              {errors.companyName && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.companyName.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -154,16 +167,17 @@ const SignUp: React.FC = () => {
             </div>
             <div className="mt-2">
               <input
-                type="password"
-                value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
                 id="password"
+                type="password"
+                {...register("password")}
                 placeholder="Enter your password"
-                required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -178,16 +192,17 @@ const SignUp: React.FC = () => {
             </div>
             <div className="mt-2">
               <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setConfirmPassword(e.target.value)
-                }
                 id="confirmPassword"
+                type="password"
+                {...register("confirmPassword")}
                 placeholder="Confirm your password"
-                required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
+              {errors.confirmPassword && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
           </div>
 

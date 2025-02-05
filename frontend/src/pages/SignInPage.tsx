@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+import { signIn } from "../services/authService";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup.string().required("Password is required"),
+});
+
+type SignInFormData = {
+  email: string;
+  password: string;
+};
 
 const SignIn: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const nvaigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInFormData>({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle sign-in logic here
-    console.log("Sign In:", { email, password });
+  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
+    try {
+      await signIn(data);
+      nvaigate("/dashboard");
+    } catch (error) {
+      console.error("Sign-in failed:", error);
+    }
   };
 
   return (
@@ -24,7 +48,7 @@ const SignIn: React.FC = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label
               htmlFor="email"
@@ -34,16 +58,18 @@ const SignIn: React.FC = () => {
             </label>
             <div className="mt-2">
               <input
-                type="email"
-                value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEmail(e.target.value)
-                }
                 id="email"
+                type="email"
+                {...register("email")}
                 placeholder="Enter your email"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -66,16 +92,18 @@ const SignIn: React.FC = () => {
             </div>
             <div className="mt-2">
               <input
-                type="password"
-                value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
                 id="password"
+                type="password"
+                {...register("password")}
                 placeholder="Enter your password"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
           </div>
 
