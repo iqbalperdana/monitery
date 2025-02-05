@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fetchInvoicesData } from "../services/invoicesService";
+import { Link } from "react-router-dom";
+import { fetchInvoicesData } from "../../services/invoicesService";
 
 interface InvoiceInterface {
   id: number;
@@ -36,7 +37,15 @@ const InvoicesPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Invoices</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Invoices</h1>
+        <Link
+          to="create"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Create Invoice
+        </Link>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-300">
           <thead>
@@ -76,4 +85,5 @@ const InvoicesPage: React.FC = () => {
     </div>
   );
 };
+
 export default InvoicesPage;
