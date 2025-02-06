@@ -12,3 +12,8 @@ export const fetchClientsData = async (): Promise<Client[]> => {
   const response = await api.get("/api/clients");
   return response.data;
 };
+
+export const createClient = async (clientData: Client): Promise<Client> => {
+  const response = await api.post("/api/clients", clientData);
+  return response.data;
+};

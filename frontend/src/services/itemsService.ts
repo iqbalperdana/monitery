@@ -6,7 +6,7 @@ export interface Item {
   price: number;
   description: string;
   image_url: string;
-  active: boolean;
+  is_active: boolean;
 }
 
 export const fetchItemsData = async (): Promise<Item[]> => {

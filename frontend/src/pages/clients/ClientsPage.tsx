@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fetchClientsData, Client } from "../services/clientsService";
+import { fetchClientsData, Client } from "../../services/clientsService";
+import { Link } from "react-router-dom";
 
 const ClientsPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -26,7 +27,15 @@ const ClientsPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Clients</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Clients</h1>
+        <Link
+          to="create"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Create Client
+        </Link>
+      </div>
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {clients.map((client) => (
           <div key={client.id} className="p-4 border rounded shadow-sm">

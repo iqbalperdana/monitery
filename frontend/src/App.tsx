@@ -10,8 +10,9 @@ import ProfilePage from "./pages/ProfilePage";
 import InvoicesPage from "./pages/invoices/InvoicesPage";
 import CreateInvoicePage from "./pages/invoices/CreateInvoicePage";
 import ItemsPage from "./pages/items/ItemsPage";
-import ClientsPage from "./pages/ClientsPage";
+import ClientsPage from "./pages/clients/ClientsPage";
 import CreateItemPage from "./pages/items/CreateItemPage";
+import CreateClientPage from "./pages/clients/CreateClientPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="items" element={<ItemsPage />} />
             <Route path="items/create" element={<CreateItemPage />} />
             <Route path="clients" element={<ClientsPage />} />
+            <Route path="clients/create" element={<CreateClientPage />} />
           </Route>
         </Route>
       </Routes>

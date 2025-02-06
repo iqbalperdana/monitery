@@ -52,9 +52,9 @@ const ItemsPage: React.FC = () => {
             <div>
               <h3 className="font-semibold">{item.name}</h3>
               <p>Price: {formatNumberToCurrencyString(item.price)}</p>
-              <p>Status: {item.active ? "Active" : "Inactive"}</p>
+              <p>Status: {item.is_active ? "Active" : "Inactive"}</p>
             </div>
-            {item.active && (
+            {item.is_active && (
               <button
                 onClick={() => handleDeactivate(item.id)}
                 className="px-4 py-2 bg-red-500 text-white rounded"
