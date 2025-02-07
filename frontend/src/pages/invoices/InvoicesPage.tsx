@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import DataTable from "react-data-table-component";
 import { fetchInvoicesData } from "../../services/invoicesService";
+import { formatNumberToCurrencyString } from "../../utils/stringUtil";
 
 interface InvoiceInterface {
   id: number;
@@ -20,23 +22,95 @@ interface InvoiceInterface {
 
 const InvoicesPage: React.FC = () => {
   const [invoices, setInvoices] = useState<InvoiceInterface[]>([]);
+  const [pending, setPending] = useState(true);
+
+  const columns = [
+    {
+      name: "Invoice ID",
+      selector: (row: InvoiceInterface) => row.invoiceNumber,
+      sortable: true,
+    },
+    {
+      name: "Client",
+      selector: (row: InvoiceInterface) => row.clientName,
+      sortable: true,
+    },
+    {
+      name: "Date",
+      selector: (row: InvoiceInterface) => row.invoiceDate,
+      sortable: true,
+    },
+    {
+      name: "Due Date",
+      selector: (row: InvoiceInterface) => row.dueDate,
+      sortable: true,
+    },
+    {
+      name: "Amount",
+      selector: (row: InvoiceInterface) => row.total,
+      sortable: true,
+      format: (row: InvoiceInterface) =>
+        formatNumberToCurrencyString(row.total),
+    },
+    {
+      name: "Status",
+      selector: (row: InvoiceInterface) => row.status,
+      sortable: true,
+      cell: (row: InvoiceInterface) => (
+        <span
+          className={`px-2 py-1 rounded-full text-sm ${
+            row.status === "Paid"
+              ? "bg-green-100 text-green-800"
+              : row.status === "Pending"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {row.status}
+        </span>
+      ),
+    },
+  ];
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const data = await fetchInvoicesData();
-        console.log(data);
         setInvoices(data);
+        setPending(false);
       } catch (error) {
         console.error("Failed to fetch invoices data:", error);
+        setPending(false);
       }
     };
 
     loadData();
   }, []);
 
+  const customStyles = {
+    rows: {
+      style: {
+        minHeight: "60px",
+      },
+    },
+    headCells: {
+      style: {
+        paddingLeft: "8px",
+        paddingRight: "8px",
+        backgroundColor: "#F3F4F6",
+        fontWeight: "bold",
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: "8px",
+        paddingRight: "8px",
+      },
+    },
+  };
+
   return (
-    <div>
+    <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Invoices</h1>
         <Link
@@ -46,42 +120,18 @@ const InvoicesPage: React.FC = () => {
           Create Invoice
         </Link>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Invoice ID
-              </th>
-              <th className="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Amount
-              </th>
-              <th className="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {invoices.map((invoice) => (
-              <tr key={invoice.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {invoice.invoiceNumber}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {invoice.invoiceDate}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{invoice.total}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {invoice.status}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        columns={columns}
+        data={invoices}
+        pagination
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 20, 30, 50]}
+        progressPending={pending}
+        customStyles={customStyles}
+        striped
+        highlightOnHover
+        pointerOnHover
+      />
     </div>
   );
 };

@@ -1,13 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 const AdminLayout: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  // Auto-close sidebar on smaller screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex">
-      <aside className="hidden w-64 bg-gray-800 md:block min-h-screen">
-        <div className="py-3 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800 mb-8">
+    <div className="min-h-screen bg-gray-900 text-white flex relative">
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Hamburger Menu Button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+      </button>
+
+      {/* Sidebar - Fixed width */}
+      <aside
+        className={`${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed md:static w-[256px] flex-shrink-0 bg-gray-800 min-h-screen transition-transform duration-300 ease-in-out z-20`}
+      >
+        <div className="py-4 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800">
           <a href="/" className="text-white">
-            Logo
+            Monitery
           </a>
         </div>
         <nav className="text-sm text-gray-300">
@@ -116,10 +168,51 @@ const AdminLayout: React.FC = () => {
           </ul>
         </nav>
       </aside>
-      {/* Main Content */}
-      <main className="flex-1 p-8">
-        <Outlet />
-      </main>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Fixed Top Navbar */}
+        <div
+          className={`fixed top-0 right-0 md:left-[256px] left-0 bg-gray-900/95 backdrop-blur-sm py-4 px-8 
+          border-b border-gray-700 z-10 transition-all duration-300 ease-in-out
+          flex items-center justify-end`}
+        >
+          <div className="flex items-center space-x-4">
+            <img
+              src="/default-avatar.png"
+              alt="Profile"
+              className="w-8 h-8 rounded-full"
+            />
+            <button
+              onClick={() => {
+                /* Add logout logic here */
+              }}
+              className="text-gray-300 hover:text-white flex items-center transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5 mr-2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                />
+              </svg>
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <main className="flex-1 pt-24 p-6 md:ml-0 transition-all duration-300">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

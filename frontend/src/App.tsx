@@ -13,11 +13,13 @@ import ItemsPage from "./pages/items/ItemsPage";
 import ClientsPage from "./pages/clients/ClientsPage";
 import CreateItemPage from "./pages/items/CreateItemPage";
 import CreateClientPage from "./pages/clients/CreateClientPage";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<SignUp />} />
         <Route element={<ProtectedRoute />}>
