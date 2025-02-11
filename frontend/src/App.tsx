@@ -23,7 +23,7 @@ function App() {
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<SignUp />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/" element={<AdminLayout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="invoices" element={<InvoicesPage />} />

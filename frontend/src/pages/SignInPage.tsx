@@ -28,7 +28,7 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
       await signIn(data);
-      navigate("/admin/dashboard");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Sign-in failed:", error);
     }
@@ -38,7 +38,7 @@ const SignIn: React.FC = () => {
     const checkAuth = async () => {
       try {
         if (isAuthenticated()) {
-          navigate("/admin/dashboard");
+          navigate("/dashboard");
         }
       } catch (error) {
         console.error("Auth check failed:", error);

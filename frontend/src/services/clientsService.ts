@@ -1,10 +1,10 @@
 import api from "../api/axios";
 
 export interface Client {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
   phone: string;
 }
 

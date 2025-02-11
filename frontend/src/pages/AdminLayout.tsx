@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
+import Breadcrumbs from "../components/Breadcrumbs";
+import ProfileNavigation from "../components/ProfileNavigation";
 
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
 
   // Auto-close sidebar on smaller screens
   useEffect(() => {
     const handleResize = () => {
+      document.documentElement.classList.toggle("dark", isDarkMode);
+
       if (window.innerWidth < 768) {
         setIsSidebarOpen(false);
       } else {
@@ -18,21 +25,41 @@ const AdminLayout: React.FC = () => {
     handleResize(); // Initial check
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [isDarkMode]);
+
+  // Add this in the top navbar section, before the logout button
+  const themeToggle = (
+    <button
+      onClick={() => setIsDarkMode(!isDarkMode)}
+      className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+    >
+      {isDarkMode ? (
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      )}
+    </button>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex relative">
+    <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#1a1d21] text-gray-900 dark:text-white flex relative">
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
+          className="md:hidden fixed inset-0 bg-black/50 dark:bg-black/70 z-20"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Hamburger Menu Button */}
       <button
-        className="md:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+        className={`md:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${
+          isSidebarOpen ? "hidden" : ""
+        }`}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         <svg
@@ -50,22 +77,21 @@ const AdminLayout: React.FC = () => {
           />
         </svg>
       </button>
-
       {/* Sidebar - Fixed width */}
       <aside
         className={`${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed md:static w-[256px] flex-shrink-0 bg-gray-800 min-h-screen transition-transform duration-300 ease-in-out z-20`}
+        } fixed md:sticky top-0 w-[256px] flex-shrink-0 bg-white dark:bg-[#212529] h-screen transition-transform duration-300 ease-in-out z-20`}
       >
-        <div className="py-4 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800">
+        <div className="py-4 text-2xl uppercase text-center tracking-wide bg-gray-900 border-gray-800">
           <a href="/" className="text-white">
             Monitery
           </a>
         </div>
-        <nav className="text-sm text-gray-300">
+        <nav className="text-md font-semibold tracking-normal">
           <ul className="flex flex-col">
-            <li className="px-4 cursor-pointer bg-gray-500 text-gray-800 hover:bg-gray-700  hover:text-white">
-              <Link to="/admin/dashboard" className="py-3 flex items-center">
+            <li className="px-4 cursor-pointer text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+              <Link to="/dashboard" className="py-3 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -86,8 +112,8 @@ const AdminLayout: React.FC = () => {
             <li className="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">
               INVOICE MANAGEMENT
             </li>
-            <li className="px-4 cursor-pointer hover:bg-gray-700">
-              <Link to="/admin/invoices" className="py-3 flex items-center">
+            <li className="px-4 cursor-pointer text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+              <Link to="/invoices" className="py-3 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -105,8 +131,8 @@ const AdminLayout: React.FC = () => {
                 Invoices
               </Link>
             </li>
-            <li className="px-4 cursor-pointer hover:bg-gray-700">
-              <Link to="/admin/items" className="py-3 flex items-center">
+            <li className="px-4 cursor-pointer text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+              <Link to="/items" className="py-3 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -124,8 +150,8 @@ const AdminLayout: React.FC = () => {
                 Items
               </Link>
             </li>
-            <li className="px-4 cursor-pointer hover:bg-gray-700">
-              <Link to="/admin/clients" className="py-3 flex items-center">
+            <li className="px-4 cursor-pointer text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+              <Link to="/clients" className="py-3 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -143,28 +169,6 @@ const AdminLayout: React.FC = () => {
                 Clients
               </Link>
             </li>
-            <li className="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">
-              USER MANAGEMENT
-            </li>
-            <li className="px-4 cursor-pointer hover:bg-gray-700">
-              <Link to="/admin/profile" className="py-3 flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-4 mr-3"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122"
-                  />
-                </svg>
-                Profile
-              </Link>
-            </li>
           </ul>
         </nav>
       </aside>
@@ -173,45 +177,21 @@ const AdminLayout: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Fixed Top Navbar */}
         <div
-          className={`fixed top-0 right-0 md:left-[256px] left-0 bg-gray-900/95 backdrop-blur-sm py-4 px-8 
-          border-b border-gray-700 z-10 transition-all duration-300 ease-in-out
-          flex items-center justify-end`}
+          className="sticky top-0 bg-white  dark:bg-[#212529] backdrop-blur-sm py-2 px-8 z-10 transition-all duration-300 ease-in-out
+          flex items-center justify-end inset-20 shadow-[rgba(0,0,15,0.5)_0px_2px_4px_0px]"
         >
-          <div className="flex items-center space-x-4">
-            <img
-              src="/default-avatar.png"
-              alt="Profile"
-              className="w-8 h-8 rounded-full"
-            />
-            <button
-              onClick={() => {
-                /* Add logout logic here */
-              }}
-              className="text-gray-300 hover:text-white flex items-center transition-colors duration-200"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-5 h-5 mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                />
-              </svg>
-              Logout
-            </button>
+          <div className="flex items-center justify-center space-x-4 h-full">
+            {themeToggle}
+            <ProfileNavigation />
           </div>
         </div>
-
         {/* Main Content */}
-        <main className="flex-1 pt-24 p-6 md:ml-0 transition-all duration-300">
-          <Outlet />
-        </main>
+        <main className="flex-1 p-6 overflow-y-auto">
+          <Breadcrumbs />
+          <div className="bg-white dark:bg-[#212529] shadow-lg p-8">
+            <Outlet />
+          </div>
+        </main>{" "}
       </div>
     </div>
   );

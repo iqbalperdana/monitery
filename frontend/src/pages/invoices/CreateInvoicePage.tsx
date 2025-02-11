@@ -90,7 +90,7 @@ const CreateInvoicePage: React.FC = () => {
       };
 
       await createInvoice(submissionData);
-      navigate("/admin/invoices");
+      navigate("/invoices");
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         const errors = {};

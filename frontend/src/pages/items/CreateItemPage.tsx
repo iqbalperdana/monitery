@@ -38,7 +38,7 @@ const CreateItemPage: React.FC = () => {
     try {
       await schema.validate(formData, { abortEarly: false });
       await createItem(formData);
-      navigate("/admin/items");
+      navigate("/items");
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         const validationErrors: Record<string, string> = {};

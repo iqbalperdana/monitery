@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { createClient } from "../../services/clientsService";
+import { createClient, Client } from "../../services/clientsService";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First name is required"),
@@ -22,15 +22,14 @@ const CreateClientPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Client) => {
     try {
       await createClient(data);
-      navigate("/admin/clients");
+      navigate("/clients");
     } catch (err) {
       console.error("Failed to create client");
     }
   };
-
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Create New Client</h1>
