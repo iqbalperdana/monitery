@@ -11,11 +11,11 @@ const api = axios.create({
 });
 
 const refreshAccessToken = async (): Promise<string> => {
-  const refreshToken = Cookies.get("Refresh");
-  console.log(refreshToken);
-  if (!refreshToken) {
-    throw new Error("No refresh token found");
-  }
+  // const refreshToken = Cookies.get("Refresh");
+  // console.log(refreshToken);
+  // if (!refreshToken) {
+  //   throw new Error("No refresh token found");
+  // }
 
   const response = await axios(`${API_BASE_URL}/auth/refresh`, {
     method: "POST",
@@ -24,6 +24,10 @@ const refreshAccessToken = async (): Promise<string> => {
     },
     withCredentials: true,
   });
+
+  if (response.status !== 200) {
+    throw new Error("Failed to refresh access token");
+  }
 
   const { accessToken } = response.data;
   localStorage.setItem("Authentication", accessToken); // Update the access token in localStorage
@@ -41,6 +45,7 @@ api.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+    config.withCredentials = true;
     return config;
   },
   (error) => {
@@ -63,9 +68,6 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
-        // remove cookies and redirect to login
-        localStorage.removeItem("Authentication");
-        Cookies.remove("Refresh");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

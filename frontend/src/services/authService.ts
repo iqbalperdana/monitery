@@ -25,7 +25,7 @@ export const signIn = async (data: SignInData): Promise<AuthResponse> => {
 
   // Store tokens
   localStorage.setItem("Authentication", accessToken);
-  Cookies.set("Refresh", refreshToken, { expires: 7 });
+  Cookies.set("Refresh", refreshToken, { expires: 7, httpOnly: true });
 
   return response.data;
 };
@@ -37,12 +37,13 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
 
   // Store tokens
   localStorage.setItem("Authentication", accessToken);
-  Cookies.set("Refresh", refreshToken, { expires: 7 });
+  Cookies.set("Refresh", refreshToken, { expires: 7, httpOnly: true });
 
   return response.data;
 };
 
 export const signOut = (): void => {
+  console.log("signOut");
   localStorage.removeItem("Authentication");
   Cookies.remove("Refresh");
 };

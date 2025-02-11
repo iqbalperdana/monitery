@@ -88,7 +88,7 @@ const AdminLayout: React.FC = () => {
             Monitery
           </a>
         </div>
-        <nav className="text-md font-semibold tracking-normal">
+        <nav className="text-sm font-normal tracking-wide">
           <ul className="flex flex-col">
             <li className="px-4 cursor-pointer text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
               <Link to="/dashboard" className="py-3 flex items-center">
