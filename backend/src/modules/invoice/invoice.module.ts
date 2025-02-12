@@ -1,17 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Invoice } from 'src/common/entities/invoice.entity';
 import { InvoiceController } from './invoice.controller';
 import { InvoiceService } from './invoice.service';
-import { InvoiceItem } from 'src/common/entities/invoice-item.entity';
+import { Invoice } from '../../common/entities/invoice.entity';
+import { InvoiceRepository } from './invoice.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Invoice]),
-    TypeOrmModule.forFeature([InvoiceItem]),
-  ],
+  imports: [TypeOrmModule.forFeature([Invoice])],
   controllers: [InvoiceController],
-  providers: [InvoiceService],
+  providers: [InvoiceService, InvoiceRepository],
   exports: [InvoiceService],
 })
 export class InvoiceModule {}

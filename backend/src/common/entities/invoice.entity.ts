@@ -6,8 +6,11 @@ import {
   UpdateDateColumn,
   OneToMany,
   BeforeInsert,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { InvoiceItem } from './invoice-item.entity';
+import { Client } from './client.entity';
 
 @Entity('invoice')
 export class Invoice {
@@ -51,6 +54,10 @@ export class Invoice {
     cascade: ['insert'],
   })
   invoiceItems: InvoiceItem[];
+
+  @OneToOne(() => Client)
+  @JoinColumn()
+  client: Client;
 
   @BeforeInsert()
   recalculateTotal() {

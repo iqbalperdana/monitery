@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/common/entities/user.entity';
@@ -21,5 +21,15 @@ export class InvoiceController {
   @Get()
   async findAll(@CurrentUser() user: User) {
     return this.invoiceService.findAll(user);
+  }
+
+  @Get('summary')
+  async getSummary(@CurrentUser() user: User) {
+    return this.invoiceService.getSummary(user);
+  }
+
+  @Get(':id')
+  async findOne(@CurrentUser() user: User, @Param('id') id: string) {
+    return this.invoiceService.getInvoiceByUserAndInvoiceId(user, id);
   }
 }

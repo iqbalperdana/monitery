@@ -5,14 +5,12 @@ import { InvoiceRepository } from './invoice.repository';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { Invoice } from 'src/common/entities/invoice.entity';
 import { InvoiceItem } from 'src/common/entities/invoice-item.entity';
-import { InvoiceItemRepository } from './invoice-item.repository';
 
 @Injectable()
 export class InvoiceService {
   constructor(
-    @InjectRepository(Invoice) private invoiceRepository: InvoiceRepository,
-    @InjectRepository(InvoiceItem)
-    private invoiceItemRepository: InvoiceItemRepository,
+    @InjectRepository(Invoice)
+    private invoiceRepository: InvoiceRepository,
   ) {}
 
   async create(user: User, createInvoiceDto: CreateInvoiceDto) {
@@ -72,5 +70,27 @@ export class InvoiceService {
 
   addLeadingZeros(number: number, length: number): string {
     return number.toString().padStart(length, '0');
+  }
+
+  async getSummary(user: User): Promise<any> {
+    const invoiceSummary =
+      await this.invoiceRepository.getInvoiceCountByStatus();
+    const totalInvoices =
+      await this.invoiceRepository.getTotalInvoicesByCompany(user.companyId);
+
+    return {
+      invoiceSummary,
+      totalInvoices,
+    };
+  }
+
+  async getInvoiceByUserAndInvoiceId(
+    user: User,
+    invoiceId: string,
+  ): Promise<Invoice> {
+    return await this.invoiceRepository.findOne({
+      where: { id: parseInt(invoiceId), companyId: user.companyId },
+      relations: ['invoiceItems', 'client'],
+    });
   }
 }
