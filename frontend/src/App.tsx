@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import InvoicesPage from "./pages/invoices/InvoicesPage";
 import CreateInvoicePage from "./pages/invoices/CreateInvoicePage";
+import ViewInvoicePage from "./pages/invoices/ViewInvoicePage";
 import ItemsPage from "./pages/items/ItemsPage";
 import ClientsPage from "./pages/clients/ClientsPage";
 import CreateItemPage from "./pages/items/CreateItemPage";
@@ -28,6 +29,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="invoices" element={<InvoicesPage />} />
             <Route path="invoices/create" element={<CreateInvoicePage />} />
+            <Route path="invoices/:id" element={<ViewInvoicePage />} />
             <Route path="items" element={<ItemsPage />} />
             <Route path="items/create" element={<CreateItemPage />} />
             <Route path="clients" element={<ClientsPage />} />

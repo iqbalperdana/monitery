@@ -110,9 +110,9 @@ const InvoicesPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Invoices</h1>
+    <div>
+      <div className="flex justify-between items-center mb-4 mt-2">
+        <h1 className="text-2xl font-medium">Invoices</h1>
         <Link
           to="create"
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -120,18 +120,20 @@ const InvoicesPage: React.FC = () => {
           Create Invoice
         </Link>
       </div>
-      <DataTable
-        columns={columns}
-        data={invoices}
-        pagination
-        paginationPerPage={10}
-        paginationRowsPerPageOptions={[10, 20, 30, 50]}
-        progressPending={pending}
-        customStyles={customStyles}
-        striped
-        highlightOnHover
-        pointerOnHover
-      />
+      <div className="bg-white dark:bg-[#202435] shadow-lg p-10 rounded-sm">
+        <DataTable
+          columns={columns}
+          data={invoices}
+          pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[10, 20, 30, 50]}
+          progressPending={pending}
+          customStyles={customStyles}
+          striped
+          highlightOnHover
+          pointerOnHover
+        />
+      </div>
     </div>
   );
 };

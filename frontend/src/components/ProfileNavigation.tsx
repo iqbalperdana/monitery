@@ -51,7 +51,7 @@ export default function ProfileNavigation() {
               ref={dropdown}
               onFocus={() => setDropdownOpen(true)}
               onBlur={() => setDropdownOpen(false)}
-              className={`absolute -right-2 top-12 w-[240px] overflow-hidden rounded-lg bg-white dark:bg-[#212529] transform transition-all duration-300 ease-in-out ${
+              className={`absolute -right-2 top-12.5 w-[240px] overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#202435] transform transition-all duration-300 ease-in-out ${
                 dropdownOpen
                   ? "opacity-100 scale-100"
                   : "opacity-0 scale-95 pointer-events-none"

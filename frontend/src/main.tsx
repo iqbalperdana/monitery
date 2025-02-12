@@ -3,7 +3,7 @@ import "./index.css";
 import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <div className="bg-white dark:bg-black font-pacifico">
+  <div className="bg-white dark:bg-black">
     <App />
   </div>
 );

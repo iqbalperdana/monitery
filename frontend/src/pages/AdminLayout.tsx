@@ -46,7 +46,7 @@ const AdminLayout: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#1a1d21] text-gray-900 dark:text-white flex relative">
+    <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#272b3e] text-gray-900 dark:text-white flex relative">
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
@@ -81,10 +81,10 @@ const AdminLayout: React.FC = () => {
       <aside
         className={`${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed md:sticky top-0 w-[256px] flex-shrink-0 bg-white dark:bg-[#212529] h-screen transition-transform duration-300 ease-in-out z-20`}
+        } fixed md:sticky top-0 w-[256px] flex-shrink-0 bg-white dark:bg-[#202435] h-screen transition-transform duration-300 ease-in-out z-20 border-r border-gray-200 dark:border-gray-700`}
       >
-        <div className="py-4 text-2xl uppercase text-center tracking-wide bg-gray-900 border-gray-800">
-          <a href="/" className="text-white">
+        <div className="py-4 text-2xl uppercase text-center tracking-wide dark:bg-[#202435] border-gray-800">
+          <a href="/" className="text-gray-800 dark:text-white">
             Monitery
           </a>
         </div>
@@ -98,7 +98,7 @@ const AdminLayout: React.FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-4 mr-3"
+                  className="w-5 mr-3"
                 >
                   <path
                     strokeLinecap="round"
@@ -120,7 +120,7 @@ const AdminLayout: React.FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-4 mr-3"
+                  className="w-5 mr-3"
                 >
                   <path
                     strokeLinecap="round"
@@ -139,7 +139,7 @@ const AdminLayout: React.FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-4 mr-3"
+                  className="w-5 mr-3"
                 >
                   <path
                     strokeLinecap="round"
@@ -158,7 +158,7 @@ const AdminLayout: React.FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-4 mr-3"
+                  className="w-5 mr-3"
                 >
                   <path
                     strokeLinecap="round"
@@ -177,8 +177,8 @@ const AdminLayout: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Fixed Top Navbar */}
         <div
-          className="sticky top-0 bg-white  dark:bg-[#212529] backdrop-blur-sm py-2 px-8 z-10 transition-all duration-300 ease-in-out
-          flex items-center justify-end inset-20 shadow-[rgba(0,0,15,0.5)_0px_2px_4px_0px]"
+          className="sticky top-0 bg-white  dark:bg-[#202435] backdrop-blur-sm py-2 px-8 z-10 transition-all duration-300 ease-in-out
+          flex items-center justify-end inset-20 shadow-[rgba(0,0,15,0.5)_0px_2px_4px_0px] border-b border-gray-200 dark:border-gray-700"
         >
           <div className="flex items-center justify-center space-x-4 h-full">
             {themeToggle}
@@ -186,11 +186,9 @@ const AdminLayout: React.FC = () => {
           </div>
         </div>
         {/* Main Content */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 px-6 py-3 overflow-y-auto">
           <Breadcrumbs />
-          <div className="bg-white dark:bg-[#212529] shadow-lg p-8">
-            <Outlet />
-          </div>
+          <Outlet />
         </main>{" "}
       </div>
     </div>

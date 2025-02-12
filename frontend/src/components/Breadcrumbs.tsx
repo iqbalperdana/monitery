@@ -5,8 +5,8 @@ const Breadcrumbs: React.FC = () => {
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
-    <nav className="flex mb-4" aria-label="Breadcrumb">
-      <ol className="inline-flex items-center space-x-1 md:space-x-3">
+    <nav className="flex mb-1" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1">
         <li className="inline-flex items-center">
           <Link
             to="dashboard"
@@ -38,7 +38,7 @@ const Breadcrumbs: React.FC = () => {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
+                <span className="ml-1 text-sm font-medium text-gray-500 dark:text-gray-400">
                   {displayName}
                 </span>
               </div>
@@ -63,7 +63,7 @@ const Breadcrumbs: React.FC = () => {
                 </svg>
                 <Link
                   to={routeTo}
-                  className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                  className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                 >
                   {displayName}
                 </Link>
