@@ -46,10 +46,19 @@ export class InvoiceService {
     return invoice;
   }
 
-  async findAll(user: User): Promise<Invoice[]> {
+  async findAll(user: User, number: string): Promise<Invoice[]> {
+    if (number) {
+      return await this.invoiceRepository.find({
+        where: {
+          companyId: user.companyId,
+          invoiceNumber: number,
+        },
+        relations: ['invoiceItems', 'client'],
+      });
+    }
+
     return await this.invoiceRepository.find({
       where: { companyId: user.companyId },
-      relations: ['invoiceItems'],
     });
   }
 

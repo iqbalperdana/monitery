@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/common/entities/user.entity';
@@ -19,8 +27,8 @@ export class InvoiceController {
   }
 
   @Get()
-  async findAll(@CurrentUser() user: User) {
-    return this.invoiceService.findAll(user);
+  async findAll(@CurrentUser() user: User, @Query('number') number: string) {
+    return this.invoiceService.findAll(user, number);
   }
 
   @Get('summary')

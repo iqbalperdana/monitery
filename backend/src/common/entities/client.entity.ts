@@ -4,6 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
 } from 'typeorm';
 
 @Entity('client')
@@ -31,4 +34,13 @@ export class Client {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  fullName: string;
+
+  @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
+  generateFullname(): void {
+    this.fullName = `${this.firstName} ${this.lastName}`;
+  }
 }
