@@ -10,6 +10,7 @@ export interface Client {
 
 export const fetchClientsData = async (): Promise<Client[]> => {
   const response = await api.get("/api/clients");
+  sessionStorage.setItem("clients", JSON.stringify(response.data));
   return response.data;
 };
 

@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import DataTable from "react-data-table-component";
-import { fetchInvoicesData } from "../../services/invoicesService";
+import DataTable from "../../components/DataTables";
+import {
+  fetchInvoicesData,
+  InvoiceInterface,
+} from "../../services/invoicesService";
+import { formatDateString } from "../../utils/dateUtil";
 import { formatNumberToCurrencyString } from "../../utils/stringUtil";
-
-interface InvoiceInterface {
-  id: number;
-  invoiceNumber: string;
-  clientName: string;
-  invoiceDate: string;
-  dueDate: string;
-  total: number;
-  status: string;
-  items: {
-    id: number;
-    name: string;
-    quantity: number;
-    price: number;
-  }[];
-}
 
 const InvoicesPage: React.FC = () => {
   const [invoices, setInvoices] = useState<InvoiceInterface[]>([]);
@@ -26,49 +14,32 @@ const InvoicesPage: React.FC = () => {
 
   const columns = [
     {
-      name: "Invoice ID",
-      selector: (row: InvoiceInterface) => row.invoiceNumber,
-      sortable: true,
+      header: "Invoice Number",
+      accessor: "invoiceNumber",
+      formatter: (value: number) => <Link to={`${value}`}>{value}</Link>,
     },
     {
-      name: "Client",
-      selector: (row: InvoiceInterface) => row.clientName,
-      sortable: true,
+      header: "Client",
+      accessor: "clientName",
     },
     {
-      name: "Date",
-      selector: (row: InvoiceInterface) => row.invoiceDate,
-      sortable: true,
+      header: "Date",
+      accessor: "invoiceDate",
+      formatter: (value: string) => formatDateString(value),
     },
     {
-      name: "Due Date",
-      selector: (row: InvoiceInterface) => row.dueDate,
-      sortable: true,
+      header: "Due Date",
+      accessor: "dueDate",
+      formatter: (value: string) => formatDateString(value),
     },
     {
-      name: "Amount",
-      selector: (row: InvoiceInterface) => row.total,
-      sortable: true,
-      format: (row: InvoiceInterface) =>
-        formatNumberToCurrencyString(row.total),
+      header: "Amount",
+      accessor: "total",
+      formatter: (value: number) => formatNumberToCurrencyString(value),
     },
     {
-      name: "Status",
-      selector: (row: InvoiceInterface) => row.status,
-      sortable: true,
-      cell: (row: InvoiceInterface) => (
-        <span
-          className={`px-2 py-1 rounded-full text-sm ${
-            row.status === "Paid"
-              ? "bg-green-100 text-green-800"
-              : row.status === "Pending"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {row.status}
-        </span>
-      ),
+      header: "Status",
+      accessor: "status",
     },
   ];
 
@@ -87,32 +58,10 @@ const InvoicesPage: React.FC = () => {
     loadData();
   }, []);
 
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: "60px",
-      },
-    },
-    headCells: {
-      style: {
-        paddingLeft: "8px",
-        paddingRight: "8px",
-        backgroundColor: "#F3F4F6",
-        fontWeight: "bold",
-      },
-    },
-    cells: {
-      style: {
-        paddingLeft: "8px",
-        paddingRight: "8px",
-      },
-    },
-  };
-
   return (
     <div>
       <div className="flex justify-between items-center mb-4 mt-2">
-        <h1 className="text-2xl font-medium">Invoices</h1>
+        <h1 className="text-3xl font-medium">Invoices</h1>
         <Link
           to="create"
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -121,21 +70,15 @@ const InvoicesPage: React.FC = () => {
         </Link>
       </div>
       <div className="bg-white dark:bg-[#202435] shadow-lg p-10 rounded-sm">
-        <DataTable
-          columns={columns}
-          data={invoices}
-          pagination
-          paginationPerPage={10}
-          paginationRowsPerPageOptions={[10, 20, 30, 50]}
-          progressPending={pending}
-          customStyles={customStyles}
-          striped
-          highlightOnHover
-          pointerOnHover
-        />
+        {pending ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <DataTable columns={columns} data={invoices} />
+        )}
       </div>
     </div>
   );
 };
-
 export default InvoicesPage;

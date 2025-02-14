@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchInvoiceById } from "../../services/invoicesService";
+import { fetchInvoiceByNumber } from "../../services/invoicesService";
 import { formatNumberToCurrencyString } from "../../utils/stringUtil";
 
 const ViewInvoicePage: React.FC = () => {
-  const { id } = useParams();
+  const { number } = useParams();
   const [invoice, setInvoice] = useState<any>(null);
 
   useEffect(() => {
     const loadInvoice = async () => {
-      console.log("Fetching invoice with ID:", id);
-      const data = await fetchInvoiceById(id);
-      setInvoice(data);
+      const data = await fetchInvoiceByNumber(number);
+      console.log(data);
+      setInvoice(data[0]);
     };
     loadInvoice();
-  }, [id]);
+  }, [number]);
 
   if (!invoice) {
     return (
@@ -120,6 +120,13 @@ const ViewInvoicePage: React.FC = () => {
                 </tr>
               </tfoot>
             </table>
+          </div>
+        </div>
+
+        <div className="mt-8 mb-8">
+          <h2 className="text-xl font-semibold mb-4">Notes</h2>
+          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded">
+            <p className="whitespace-pre-line">{invoice.notes}</p>
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="invoices" element={<InvoicesPage />} />
             <Route path="invoices/create" element={<CreateInvoicePage />} />
-            <Route path="invoices/:id" element={<ViewInvoicePage />} />
+            <Route path="invoices/:number" element={<ViewInvoicePage />} />
             <Route path="items" element={<ItemsPage />} />
             <Route path="items/create" element={<CreateItemPage />} />
             <Route path="clients" element={<ClientsPage />} />
