@@ -100,8 +100,8 @@ const DataTable: React.FC<DataTableProps> = ({
               key={rowIndex}
               className={`${
                 rowIndex % 2 === 0
-                  ? "dark:bg-gray-800 bg-white"
-                  : "dark:bg-gray-700 bg-gray-100"
+                  ? "dark:bg-gray-800 bg-white hover:bg-gray-200 dark:hover:bg-gray-600"
+                  : "dark:bg-gray-700 bg-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               {columns.map((column) => (

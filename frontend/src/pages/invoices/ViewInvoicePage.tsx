@@ -9,6 +9,7 @@ const ViewInvoicePage: React.FC = () => {
 
   useEffect(() => {
     const loadInvoice = async () => {
+      if (!number) return;
       const data = await fetchInvoiceByNumber(number);
       console.log(data);
       setInvoice(data[0]);
@@ -27,7 +28,7 @@ const ViewInvoicePage: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-3 mt-2">
-        <h1 className="text-2xl font-medium">View Invoice</h1>
+        <h1 className="text-3xl font-semibold">View Invoice</h1>
       </div>
       <div className="bg-white dark:bg-[#202435] shadow-lg p-10 rounded-sm shadow">
         <div className="flex justify-between items-start mb-8">

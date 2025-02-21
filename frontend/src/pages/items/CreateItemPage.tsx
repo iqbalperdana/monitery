@@ -55,72 +55,89 @@ const CreateItemPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Create New Item</h1>
+    <div>
+      <div className="flex justify-between items-center mb-4 mt-2">
+        <h1 className="text-3xl font-semibold dark:text-white text-gray-900">
+          Create New Item
+        </h1>
+      </div>
+      <div className="bg-white dark:bg-[#202435] shadow-lg p-8 rounded-lg">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium mb-2 dark:text-gray-300 text-gray-700">
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.name && (
+                <span className="text-red-500 text-sm">{errors.name}</span>
+              )}
+            </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-col">
-          <label className="mb-1">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          {errors.name && (
-            <span className="text-red-500 text-sm">{errors.name}</span>
-          )}
-        </div>
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium mb-2 dark:text-gray-300 text-gray-700">
+                Price
+              </label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.price && (
+                <span className="text-red-500 text-sm">{errors.price}</span>
+              )}
+            </div>
 
-        <div className="flex flex-col">
-          <label className="mb-1">Price</label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          {errors.price && (
-            <span className="text-red-500 text-sm">{errors.price}</span>
-          )}
-        </div>
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium mb-2 dark:text-gray-300 text-gray-700">
+                Description
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.description && (
+                <span className="text-red-500 text-sm">
+                  {errors.description}
+                </span>
+              )}
+            </div>
 
-        <div className="flex flex-col">
-          <label className="mb-1">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          {errors.description && (
-            <span className="text-red-500 text-sm">{errors.description}</span>
-          )}
-        </div>
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium mb-2 dark:text-gray-300 text-gray-700">
+                Image URL
+              </label>
+              <input
+                type="text"
+                name="image_url"
+                value={formData.image_url}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.image_url && (
+                <span className="text-red-500 text-sm">{errors.image_url}</span>
+              )}
+            </div>
+          </div>
 
-        <div className="flex flex-col">
-          <label className="mb-1">Image URL</label>
-          <input
-            type="text"
-            name="image_url"
-            value={formData.image_url}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          {errors.image_url && (
-            <span className="text-red-500 text-sm">{errors.image_url}</span>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Create Item
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full py-3 px-6 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all"
+          >
+            Create Item
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

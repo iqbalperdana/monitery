@@ -150,9 +150,9 @@ const CreateInvoicePage: React.FC = () => {
   }));
 
   return (
-    <div className="p-1 lg:p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold dark:text-white text-gray-900">
+    <div>
+      <div className="flex justify-between items-center mb-4 mt-2">
+        <h1 className="text-3xl font-semibold dark:text-white text-gray-900">
           Create New Invoice
         </h1>
       </div>
